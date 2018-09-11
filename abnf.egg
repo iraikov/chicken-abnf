@@ -1,0 +1,11 @@
+;; -*- Hen -*-
+
+((synopsis "Parser combinators for Augmented BNF grammars (RFC 4234).")
+ (license "GPL-3")
+ (category parsing)
+ (dependencies srfi-1 utf8 lexgen) ; 8.0) )
+ (test-dependencies test)
+ (author "Ivan Raikov")
+ (components (extension abnf)
+             (extension abnf-consumers))
+ )
