@@ -5,23 +5,23 @@ Parser combinators for Augmented BNF grammars (RFC 4234)
 
 The `abnf` library provides a collection of combinators to help constructing parsers
 for Augmented Backus-Naur form (ABNF) grammars
-(http://www.ietf.org/rfc/rfc4234.txt "RFC 4234").
+[RFC 4234](http://www.ietf.org/rfc/rfc4234.txt).
 
 ## Library Procedures
 
 The combinator procedures in this library are based on the interface
-provided by the (https://github.com/iraikov/chicken-lexgen "lexgen") library.
+provided by the [lexgen](https://github.com/iraikov/chicken-lexgen) library.
 
 ### Terminal values and core rules 
 
 <procedure>(char CHAR) => MATCHER</procedure>
 
-Procedure {{char}} builds a pattern matcher function that matches a
+Procedure `char` builds a pattern matcher function that matches a
 single character.
 
 <procedure>(lit STRING) => MATCHER</procedure>
 
-{{lit}} matches a literal string (case-insensitive).
+`lit` matches a literal string (case-insensitive).
 
 
 The following primitive parsers match the rules described in RFC 4234, Section 6.1.
@@ -74,8 +74,8 @@ Matches the tab character.
 <procedure>(lwsp STREAM-LIST) => STREAM-LIST</procedure>
 
 Matches linear white-space. That is, any number of consecutive
-{{wsp}}, optionally followed by a {{crlf}} and (at least) one more
-{{wsp}}.
+`wsp`, optionally followed by a `crlf` and (at least) one more
+`wsp`.
 
 <procedure>(sp STREAM-LIST) => STREAM-LIST</procedure>
 
@@ -115,40 +115,40 @@ Matches any character from a set defined as a string.
 
 <procedure>(concatenation MATCHER-LIST) => MATCHER</procedure>
 
-{{concatenation}} matches an ordered list of rules. (RFC 4234, Section 3.1)
+`concatenation` matches an ordered list of rules. (RFC 4234, Section 3.1)
 
 
 <procedure>(alternatives MATCHER-LIST) => MATCHER</procedure>
 
-{{alternatives}} matches any one of the given list of rules. (RFC 4234, Section 3.2)
+`alternatives` matches any one of the given list of rules. (RFC 4234, Section 3.2)
 
 
 <procedure>(range C1 C2) => MATCHER</procedure>
 
-{{range}} matches a range of characters. (RFC 4234, Section 3.4)
+`range` matches a range of characters. (RFC 4234, Section 3.4)
 
 <procedure>(variable-repetition MIN MAX MATCHER) => MATCHER</procedure>
 
-{{variable-repetition}} matches between {{MIN}} and {{MAX}} or more consecutive
+`variable-repetition` matches between `MIN` and `MAX` or more consecutive
 elements that match the given rule. (RFC 4234, Section 3.6)
 
 <procedure>(repetition MATCHER) => MATCHER</procedure>
 
-{{repetition}} matches zero or more consecutive elements that match the given rule. 
+`repetition` matches zero or more consecutive elements that match the given rule. 
 
 <procedure>(repetition1 MATCHER) => MATCHER</procedure>
 
-{{repetition1}} matches one or more consecutive elements that match the given rule. 
+`repetition1` matches one or more consecutive elements that match the given rule. 
 
 
 <procedure>(repetition-n N MATCHER) => MATCHER</procedure>
 
-{{repetition-n}} matches exactly {{N}} consecutive occurences of the given rule. (RFC 4234, Section 3.7)
+`repetition-n` matches exactly `N` consecutive occurences of the given rule. (RFC 4234, Section 3.7)
 
 
 <procedure>(optional-sequence MATCHER) => MATCHER</procedure>
 
-{{optional-sequence}} matches the given optional rule. (RFC 4234, Section 3.8)
+`optional-sequence` matches the given optional rule. (RFC 4234, Section 3.8)
 
 <procedure>(pass) => MATCHER</procedure>
 
@@ -156,8 +156,8 @@ This matcher returns without consuming any input.
 
 <procedure>(bind F P) => MATCHER</procedure>
 
-Given a rule {{P}} and function {{F}}, returns a matcher that first
-applies {{P}} to the input stream, then applies {{F}} to the returned
+Given a rule `P` and function `F`, returns a matcher that first
+applies `P` to the input stream, then applies `F` to the returned
 list of consumed tokens, and returns the result and the remainder of
 the input stream.
 
@@ -166,25 +166,25 @@ empty.
 
 <procedure>(bind* F P) => MATCHER</procedure>
 
-The same as {{bind}}, but will signal success if the input stream is
+The same as `bind`, but will signal success if the input stream is
 empty.
 
 <procedure>(drop-consumed P) => MATCHER</procedure>
 
-Given a rule {{P}}, returns a matcher that always returns an empty
-list of consumed tokens when {{P}} succeeds. 
+Given a rule `P`, returns a matcher that always returns an empty
+list of consumed tokens when `P` succeeds. 
 
 ### Abbreviated syntax
 
 `abnf` supports the following abbreviations for commonly used combinators:
 
-; {{::}} : {{concatenation}}
-; {{:?}} : {{optional-sequence}}
-; {{:!}} : {{drop-consumed}}
-; {{:s}} : {{lit}}
-; {{:c}} : {{char}}
-; {{:*}} : {{repetition}}
-; {{:+}} : {{repetition1}}
+; `::` : `concatenation`
+; `:?` : `optional-sequence`
+; `:!` : `drop-consumed`
+; `:s` : `lit`
+; `:c` : `char`
+; `:*` : `repetition`
+; `:+` : `repetition1`
 
 
 ## Examples
