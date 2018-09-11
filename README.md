@@ -5,12 +5,12 @@ Parser combinators for Augmented BNF grammars (RFC 4234)
 
 The `abnf` library provides a collection of combinators to help constructing parsers
 for Augmented Backus-Naur form (ABNF) grammars
-([[http://www.ietf.org/rfc/rfc4234.txt|RFC 4234]]).
+(http://www.ietf.org/rfc/rfc4234.txt "RFC 4234").
 
 ## Library Procedures
 
 The combinator procedures in this library are based on the interface
-provided by the [[lexgen]] library.
+provided by the (https://github.com/iraikov/chicken-lexgen "lexgen") library.
 
 ### Terminal values and core rules 
 
@@ -192,17 +192,17 @@ list of consumed tokens when {{P}} succeeds.
 The following parser libraries have been implemented with `abnf`, in
 order of complexity:
 
-* [[csv]] 
-* [[internet-timestamp]] 
-* [[json-abnf]] 
-* [[mbox]]
-* [[smtp]] 
-* [[internet-message]] 
-* [[mime]] 
+* csv
+* internet-timestamp
+* json-abnf
+* mbox
+* smtp
+* internet-message
+* mime
 
 ### Parsing date and time
 
-```
+```scheme
 
 (import abnf)
 
