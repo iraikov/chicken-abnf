@@ -7,5 +7,6 @@
  (test-dependencies test)
  (author "Ivan Raikov")
  (components (extension abnf)
-             (extension abnf-consumers))
+             (extension abnf-consumers
+                        (component-dependencies abnf)))
  )
