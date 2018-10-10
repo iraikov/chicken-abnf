@@ -1,31 +1,27 @@
 # chicken-abnf
 Parser combinators for Augmented BNF grammars (RFC 4234)
 
+## Documentation
 
-## Description
-
-{{abnf}} is a collection of combinators to help constructing parsers
+The `abnf` library provides a collection of combinators to help constructing parsers
 for Augmented Backus-Naur form (ABNF) grammars
-([[http://www.ietf.org/rfc/rfc4234.txt|RFC 4234]]).
+[RFC 4234](http://www.ietf.org/rfc/rfc4234.txt).
 
 ## Library Procedures
 
 The combinator procedures in this library are based on the interface
-provided by the [[lexgen]] library.
+provided by the [lexgen](https://github.com/iraikov/chicken-lexgen) library.
 
 ### Terminal values and core rules 
 
-The following procedures are provided as fields in the {{<CoreABNF>}} typeclass:
-
 <procedure>(char CHAR) => MATCHER</procedure>
 
-Procedure {{char}} builds a pattern matcher function that matches a
+Procedure `char` builds a pattern matcher function that matches a
 single character.
 
 <procedure>(lit STRING) => MATCHER</procedure>
 
-{{lit}} matches a literal string (case-insensitive).
-
+`lit` matches a literal string (case-insensitive).
 
 The following primitive parsers match the rules described in RFC 4234, Section 6.1.
 
@@ -77,8 +73,8 @@ Matches the tab character.
 <procedure>(lwsp STREAM-LIST) => STREAM-LIST</procedure>
 
 Matches linear white-space. That is, any number of consecutive
-{{wsp}}, optionally followed by a {{crlf}} and (at least) one more
-{{wsp}}.
+`wsp`, optionally followed by a `crlf` and (at least) one more
+`wsp`.
 
 <procedure>(sp STREAM-LIST) => STREAM-LIST</procedure>
 
@@ -118,40 +114,38 @@ Matches any character from a set defined as a string.
 
 <procedure>(concatenation MATCHER-LIST) => MATCHER</procedure>
 
-{{concatenation}} matches an ordered list of rules. (RFC 4234, Section 3.1)
+`concatenation` matches an ordered list of rules. (RFC 4234, Section 3.1)
 
 
 <procedure>(alternatives MATCHER-LIST) => MATCHER</procedure>
 
-{{alternatives}} matches any one of the given list of rules. (RFC 4234, Section 3.2)
-
+`alternatives` matches any one of the given list of rules. (RFC 4234, Section 3.2)
 
 <procedure>(range C1 C2) => MATCHER</procedure>
 
-{{range}} matches a range of characters. (RFC 4234, Section 3.4)
+`range` matches a range of characters. (RFC 4234, Section 3.4)
 
 <procedure>(variable-repetition MIN MAX MATCHER) => MATCHER</procedure>
 
-{{variable-repetition}} matches between {{MIN}} and {{MAX}} or more consecutive
+`variable-repetition` matches between `MIN` and `MAX` or more consecutive
 elements that match the given rule. (RFC 4234, Section 3.6)
 
 <procedure>(repetition MATCHER) => MATCHER</procedure>
 
-{{repetition}} matches zero or more consecutive elements that match the given rule. 
+`repetition` matches zero or more consecutive elements that match the given rule. 
 
 <procedure>(repetition1 MATCHER) => MATCHER</procedure>
 
-{{repetition1}} matches one or more consecutive elements that match the given rule. 
-
+`repetition1` matches one or more consecutive elements that match the given rule. 
 
 <procedure>(repetition-n N MATCHER) => MATCHER</procedure>
 
-{{repetition-n}} matches exactly {{N}} consecutive occurences of the given rule. (RFC 4234, Section 3.7)
+`repetition-n` matches exactly `N` consecutive occurences of the given rule. (RFC 4234, Section 3.7)
 
 
 <procedure>(optional-sequence MATCHER) => MATCHER</procedure>
 
-{{optional-sequence}} matches the given optional rule. (RFC 4234, Section 3.8)
+`optional-sequence` matches the given optional rule. (RFC 4234, Section 3.8)
 
 <procedure>(pass) => MATCHER</procedure>
 
@@ -159,8 +153,8 @@ This matcher returns without consuming any input.
 
 <procedure>(bind F P) => MATCHER</procedure>
 
-Given a rule {{P}} and function {{F}}, returns a matcher that first
-applies {{P}} to the input stream, then applies {{F}} to the returned
+Given a rule `P` and function `F`, returns a matcher that first
+applies `P` to the input stream, then applies `F` to the returned
 list of consumed tokens, and returns the result and the remainder of
 the input stream.
 
@@ -169,55 +163,54 @@ empty.
 
 <procedure>(bind* F P) => MATCHER</procedure>
 
-The same as {{bind}}, but will signal success if the input stream is
+The same as `bind`, but will signal success if the input stream is
 empty.
 
 <procedure>(drop-consumed P) => MATCHER</procedure>
 
-Given a rule {{P}}, returns a matcher that always returns an empty
-list of consumed tokens when {{P}} succeeds. 
+Given a rule `P`, returns a matcher that always returns an empty
+list of consumed tokens when `P` succeeds. 
 
 ### Abbreviated syntax
 
-{{abnf}} supports the following abbreviations for commonly used combinators:
+`abnf` supports the following abbreviations for commonly used combinators:
 
-; {{::}} : {{concatenation}}
-; {{:?}} : {{optional-sequence}}
-; {{:!}} : {{drop-consumed}}
-; {{:s}} : {{lit}}
-; {{:c}} : {{char}}
-; {{:*}} : {{repetition}}
-; {{:+}} : {{repetition1}}
+; `::` : `concatenation`
+; `:?` : `optional-sequence`
+; `:!` : `drop-consumed`
+; `:s` : `lit`
+; `:c` : `char`
+; `:*` : `repetition`
+; `:+` : `repetition1`
 
 
 ## Examples
 
-The following parser libraries have been implemented with {{abnf}}, in
+The following parser libraries have been implemented with `abnf`, in
 order of complexity:
 
-* [[csv]] 
-* [[internet-timestamp]] 
-* [[json-abnf]] 
-* [[mbox]]
-* [[smtp]] 
-* [[internet-message]] 
-* [[mime]] 
+* csv
+* internet-timestamp
+* json-abnf
+* mbox
+* smtp
+* internet-message
+* mime
 
 ### Parsing date and time
 
 ```scheme
 
-(import lexgen abnf)
+(import abnf)
 
 (define fws
   (concatenation
    (optional-sequence 
     (concatenation
-     (repetition char-list/wsp)
+     (repetition wsp)
      (drop-consumed 
-      (alternatives char-list/crlf char-list/lf char-list/cr))))
-   (repetition1 char-list/wsp)))
-
+      (alternatives crlf lf cr))))
+   (repetition1 wsp)))
 
 (define (between-fws p)
   (concatenation
@@ -237,13 +230,13 @@ order of complexity:
 
 (define day-name 
   (alternatives
-   (char-list/lit "Mon")
-   (char-list/lit "Tue")
-   (char-list/lit "Wed")
-   (char-list/lit "Thu")
-   (char-list/lit "Fri")
-   (char-list/lit "Sat")
-   (char-list/lit "Sun")))
+   (lit "Mon")
+   (lit "Tue")
+   (lit "Wed")
+   (lit "Thu")
+   (lit "Fri")
+   (lit "Sat")
+   (lit "Sun")))
 
 ;; Match a day-name, optionally wrapped in folding whitespace
 
@@ -252,23 +245,23 @@ order of complexity:
 
 ;; Match a four digit decimal number
 
-(define year (between-fws (repetition-n 4 char-list/decimal)))
+(define year (between-fws (repetition-n 4 decimal)))
 
 ;; Match the abbreviated month names
 
 (define month-name (alternatives
-		    (char-list/lit "Jan")
-		    (char-list/lit "Feb")
-		    (char-list/lit "Mar")
-		    (char-list/lit "Apr")
-		    (char-list/lit "May")
-		    (char-list/lit "Jun")
-		    (char-list/lit "Jul")
-		    (char-list/lit "Aug")
-		    (char-list/lit "Sep")
-		    (char-list/lit "Oct")
-		    (char-list/lit "Nov")
-		    (char-list/lit "Dec")))
+		    (lit "Jan")
+		    (lit "Feb")
+		    (lit "Mar")
+		    (lit "Apr")
+		    (lit "May")
+		    (lit "Jun")
+		    (lit "Jul")
+		    (lit "Aug")
+		    (lit "Sep")
+		    (lit "Oct")
+		    (lit "Nov")
+		    (lit "Dec")))
 
 ;; Match a month-name, optionally wrapped in folding whitespace
 
@@ -280,7 +273,7 @@ order of complexity:
 (define day (concatenation
 	     (drop-consumed (optional-sequence fws))
 	     (alternatives 
-	      (variable-repetition 1 2 char-list/decimal)
+	      (variable-repetition 1 2 decimal)
 	      (drop-consumed fws))))
 
 ;; Match a date of the form dd:mm:yyyy
@@ -288,16 +281,16 @@ order of complexity:
 
 ;; Match a two-digit number 
 
-(define hour      (repetition-n 2 char-list/decimal))
-(define minute    (repetition-n 2 char-list/decimal))
-(define isecond   (repetition-n 2 char-list/decimal))
+(define hour      (repetition-n 2 decimal))
+(define minute    (repetition-n 2 decimal))
+(define isecond   (repetition-n 2 decimal))
 
 ;; Match a time-of-day specification of hh:mm or hh:mm:ss.
 
 (define time-of-day (concatenation
-		     hour (drop-consumed (char-list/char #\:))
+		     hour (drop-consumed (char #\:))
 		     minute (optional-sequence 
-			     (concatenation (drop-consumed (char-list/char #\:))
+			     (concatenation (drop-consumed (char #\:))
  					 isecond))))
 
 ;; Match a timezone specification of the form
@@ -305,7 +298,7 @@ order of complexity:
 
 (define zone (concatenation 
 	      (drop-consumed fws)
-	      (alternatives (char-list/char #\-) (char-list/char #\+))
+	      (alternatives (char #\-) (char #\+))
 	      hour minute))
 
 ;; Match a time-of-day specification followed by a zone.
@@ -316,7 +309,7 @@ order of complexity:
 		   (optional-sequence
 		    (concatenation
 		     day-of-week
-		     (drop-consumed (char-list/char #\,))))
+		     (drop-consumed (char #\,))))
 		   date
 		   itime
 		   (drop-consumed (optional-sequence fws))))
@@ -338,6 +331,7 @@ order of complexity:
 
 ## Version History
 
+* 8.0 Ported to CHICKEN 5 and yasos collections interface 
 * 7.0 Added bind* variant of bind [thanks to Peter Bex]
 * 6.0 Using utf8 for char operations
 * 5.1 Improvements to the CharLex->CoreABNF constructor
@@ -359,19 +353,22 @@ order of complexity:
 
 ## License
 
+>
+>
+>  Copyright 2009-2018 Ivan Raikov
+>
+>
+>  This program is free software: you can redistribute it and/or
+>  modify it under the terms of the GNU General Public License as
+>  published by the Free Software Foundation, either version 3 of the
+>  License, or (at your option) any later version.
+>
+>  This program is distributed in the hope that it will be useful, but
+>  WITHOUT ANY WARRANTY; without even the implied warranty of
+>  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+>  General Public License for more details.
+>
+>  A full copy of the GPL license can be found at
+>  <http://www.gnu.org/licenses/>.
+>
 
-  Copyright 2009-2018 Ivan Raikov
-
-
-  This program is free software: you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation, either version 3 of the
-  License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  General Public License for more details.
-
-  A full copy of the GPL license can be found at
-  <http://www.gnu.org/licenses/>.
