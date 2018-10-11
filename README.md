@@ -323,12 +323,6 @@ order of complexity:
 ```
 
 
-## Requires
-
-* [[lexgen]]
-* [[typeclass]]
-* [[input-classes]]
-
 ## Version History
 
 * 8.0 Ported to CHICKEN 5 and yasos collections interface 
