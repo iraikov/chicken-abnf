@@ -6,7 +6,8 @@
  (dependencies srfi-1 utf8 lexgen) 
  (test-dependencies test)
  (author "Ivan Raikov")
- (components (extension abnf)
+ (components (extension abnf
+                        (csc-options "-keyword-style" "none"))
              (extension abnf-consumers
                         (component-dependencies abnf)))
  )
