@@ -325,6 +325,7 @@ order of complexity:
 
 ## Version History
 
+* 8.3 Removed unneeded dependency on yasos [thanks to Mario Domenech Goulart]
 * 8.0 Ported to CHICKEN 5 and yasos collections interface 
 * 7.0 Added bind* variant of bind [thanks to Peter Bex]
 * 6.0 Using utf8 for char operations
@@ -349,7 +350,7 @@ order of complexity:
 
 >
 >
->  Copyright 2009-2018 Ivan Raikov
+>  Copyright 2009-2021 Ivan Raikov
 >
 >
 >  This program is free software: you can redistribute it and/or
