@@ -3,7 +3,7 @@
 ;;  Syntax Specifications: ABNF".
 ;;
 ;;
-;;   Copyright 2009-2018 Ivan Raikov
+;;   Copyright 2009-2021 Ivan Raikov
 ;;
 ;;
 ;;   This program is free software: you can redistribute it and/or
@@ -38,7 +38,7 @@
 
         (import scheme (chicken base) 
                 (only srfi-1 fold list-tabulate)
-                utf8 utf8-srfi-14 yasos yasos-collections
+                utf8 utf8-srfi-14
                 (prefix lexgen lex:))
 
         
