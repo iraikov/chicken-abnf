@@ -3,11 +3,14 @@
 ((synopsis "Parser combinators for Augmented BNF grammars (RFC 4234).")
  (license "GPL-3")
  (category parsing)
- (dependencies srfi-1 utf8 lexgen)
+ (dependencies srfi-1 utf8 lexgen matchable datatype)
  (test-dependencies test)
  (author "Ivan Raikov")
  (components (extension abnf
                         (csc-options "-keyword-style" "none"))
              (extension abnf-consumers
-                        (component-dependencies abnf)))
+                        (component-dependencies abnf))
+             (extension abnf-lens
+                        (component-dependencies abnf)
+                        (csc-options "-keyword-style" "none")))
  )
